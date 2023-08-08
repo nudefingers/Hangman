@@ -1,10 +1,11 @@
 import React from 'react';
 
-function Score( {count} ) {
-    
-    return (<div className='score'>
-        {count}
-    </div>)
+function Score({ score }) {
+    return <div className={
+        score >= 80 ? "high-score"
+            : score >= 50 ? "medium-score"
+                : "low-score"
+    }>{score}</div>
 }
 
 export default Score

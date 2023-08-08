@@ -3,17 +3,12 @@ import React, { useState, useEffect } from 'react';
 import Letters from './components/Letters';
 import Score from './components/Score';
 import Solution from './components/Solution';
+import EndGame from './components/EndGame';
 
 function App() {
-    const word = "bomb".toUpperCase()
-    const score = 50
-
     const [letterStatus, setLetterStatus] = useState(generateLetterStatuses())
-    const [solutionProcess, setSolutionProcess] = useState(generateSolutionStatuses())
-    const [decided, setDdecided] = useState(solutionProcess.map(item => item.status).every(status => status === true))
-
-    useEffect(() => {
-    }, [letterStatus, solutionProcess, decided])
+    const [solution, setSolution] = useState({ word: `bomb`, hint: `BAAAAM!` })
+    const [score, setScore] = useState(100)
 
     function generateLetterStatuses() {
         const _letterStatuses = {}
@@ -24,43 +19,29 @@ function App() {
         return _letterStatuses
     }
 
-    function generateSolutionStatuses() {
-        const _solutionStatuses = []
-        for (const char of word) {
-            _solutionStatuses.push({ char: char, status: false })
-        }
-        return _solutionStatuses
-    }
-
-    function changeLetterStatus(_letter) {
+    function selectLetter(_letter) {
         setLetterStatus((prevLetterStatus) => {
             return {
                 ...prevLetterStatus,
                 [_letter]: true,
             }
         })
-
-        setSolutionProcess((prevSolutionProcess) => {
-            const updatedSolutionProcess = prevSolutionProcess.map(item => {
-                if (item.char === _letter) {
-                    return { ...item, status: true }
-                }
-                return item
-            })
-            setDdecided(updatedSolutionProcess.map(item => item.status).every(status => status === true))
-            return updatedSolutionProcess
-        })
-
-        if (decided) {
-            alert(`YOU WIN !`)
-        }
+        setScore(score + (solution.word.toUpperCase().includes(_letter) ? 5 : -20))
+        console.log(win())
     }
+
+    const win = () => [...solution.word.toUpperCase()].every(letter => letterStatus[letter])
 
     return (
         <React.Fragment>
-            <Score count={score} />
-            <Solution solutionProcess={solutionProcess} />
-            <Letters chars={letterStatus} changeCharStatus={changeLetterStatus} />
+            {(win() || (score <= 0)) 
+            ? <EndGame isGuessed={win()} word={solution.word} />
+            :<React.Fragment>
+                <Score score={score} />
+                <Solution solution={solution} letterStatus={letterStatus} />
+                <Letters chars={letterStatus} changeCharStatus={selectLetter} />
+            </React.Fragment>
+            }
         </React.Fragment>
     )
 }
