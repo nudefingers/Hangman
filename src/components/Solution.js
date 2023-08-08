@@ -1,11 +1,15 @@
 import React from 'react';
 
-function Solution({ word }) {
-    return (<div className='solution'>
-        {word.split("").map((char, index) => (
-            <span char={char} key={index}>_</span>
-        ))}
-    </div>)
+function Solution({ solutionProcess }) {
+    return (
+        <div className='solution'>
+            {solutionProcess.map(({ char, status }, index) => (
+                <span className='solution-char' key={index}>
+                    {status ? char : "_"}
+                </span>
+            ))}
+        </div>
+    )
 }
 
 export default Solution

@@ -13,12 +13,30 @@ code {
 }
 
 span {
-    color: #1e3799;
+    text-decoration: line-through;
+    color: lightslategray;
     font-size: 72px;
     margin: 10px;
+
 }
+
+.letters {
+    display: flex;
+    flex-wrap: wrap;
+  }
 
 .score {
     font-size: 72px;
     margin: 10px;
+}
+
+.clickable {
+    text-decoration: none;
+    color: #1e3799;
+    cursor: pointer;
+}
+
+.solution-char {
+    text-decoration: none;
+    color: black;
 }
